@@ -4,12 +4,13 @@
 # docs: http://127.0.0.1:9000/docs#/
 from fastapi import FastAPI, UploadFile, File
 from faster_whisper import WhisperModel
+from fastapi.middleware.cors import CORSMiddleware
 import tempfile
 import shutil
 
 app = FastAPI()
 
-# CORS (start open; later restrict to your app domain)
+# CORS (TODO: later restrict to app domain)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
