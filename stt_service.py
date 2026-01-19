@@ -27,13 +27,7 @@ async def transcribe(file: UploadFile = File(...)):
         shutil.copyfileobj(file.file, tmp)
         tmp_path = tmp.name
 
-    segments, info = model.transcribe(
-        tmp_path,
-        vad_filter=false,
-        beam_size=1,          # important
-        best_of=1,            # important
-    )
-
+    segments, info = model.transcribe(tmp_path, vad_filter=True, beam_size=1, best_of=1)
 
     text = "".join(seg.text for seg in segments)
 
