@@ -1,9 +1,22 @@
+# source venv/bin/activate
+# pip install fastapi uvicorn faster-whisper
+# uvicorn stt_service:app --host 0.0.0.0 --port 9000
+# docs: http://127.0.0.1:9000/docs#/
 from fastapi import FastAPI, UploadFile, File
 from faster_whisper import WhisperModel
 import tempfile
 import shutil
 
 app = FastAPI()
+
+# CORS (start open; later restrict to your app domain)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 model = WhisperModel("small", device="cpu", compute_type="int8")
 
@@ -26,3 +39,7 @@ async def transcribe(file: UploadFile = File(...)):
             for s in segments
         ]
     }
+
+@app.get("/")
+def health():
+    return {"status": "STT Whisper MultiLang running"}
